@@ -1,7 +1,7 @@
 /*	Author: lab
  *  Partner(s) Name: Hulbert Zeng
  *	Lab Section:021
- *	Assignment: Lab #3  Exercise #3
+ *	Assignment: Lab #3  Exercise #2
  *	Exercise Description: [optional - include for your own benefit]
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -35,12 +35,6 @@ int main(void) {
 	}
 	if(PINA <= 4) {
 	    ledlight += 0x40;
-	}
-	unsigned char seatbelt = PINA & 0x40;
-	unsigned char seated = PINA & 0x20;
-	unsigned char key = PINA & 0x10;
-	if(!seatbelt && seated && key) {
-	    ledlight += 0x80;
 	}
 
 	PORTC = ledlight;

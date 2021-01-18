@@ -17,20 +17,18 @@ int main(void) {
     /* Insert DDR and PORT initializations */
     DDRB = 0xFE; PORTB = 0x01;
     DDRD = 0x00; PORTD = 0xFF;
-    unsigned short weight = 0;
-    unsigned char range = 0;
+    unsigned short weight;
     /* Insert your solution below */
     while (1) {
-	weight += PINB & 0x01;
-	weight += PIND << 1;
+	weight = (PIND << 1) + ((PINB & 0x01) == 1);
 
 	if(weight >= 70) {
-	    range += 0x02;
+	    PORTB = 0x02;
 	} else if(weight > 5) {
-	    range += 0x04;
-	}
-
-	PORTB = PORTB || range;
+	    PORTB = 0x04;
+	} else {
+        PORTB = 0x00;
+    }
     }
     return 1;
 }

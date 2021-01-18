@@ -20,7 +20,7 @@ int main(void) {
     DDRC = 0xFF; PORTC = 0x00;
     /* Insert your solution below */
     while (1) {
-	PORTB = PINA & 0xF0;
+	PORTB = (PINA & 0xF0) >> 4;
 	PORTC = (PINA & 0x0F) << 4;
     }
     return 1;

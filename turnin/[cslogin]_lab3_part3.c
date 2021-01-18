@@ -17,33 +17,37 @@ int main(void) {
     /* Insert DDR and PORT initializations */
     DDRA = 0x00; PORTA = 0xFF;
     DDRC = 0xFF; PORTC = 0x00;
-    unsigned char ledlight = 0;
+	unsigned char levels = 0;
+	unsigned char lowfuel = 0;
+	unsigned char fastenicon = 0;
     /* Insert your solution below */
     while (1) {
-	if(PINA > 0) {
-	    ledlight += 0x20;
-	} else if(PINA > 2) {
-	    ledlight += 0x10;
-	} else if(PINA > 4) {
-	    ledlight += 0x08;
-	} else if(PINA > 6) {
-	    ledlight += 0x04;
-	} else if(PINA > 9) {
-	    ledlight += 0x02;
-	} else if(PINA > 12) {
-	    ledlight += 0x01;
+	if((PINA & 0x0F) > 0) {
+	    levels = levels | 0x20;
 	}
-	if(PINA <= 4) {
-	    ledlight += 0x40;
+	if((PINA & 0x0F) > 2) {
+	    levels = levels | 0x10;
 	}
-	unsigned char seatbelt = PINA & 0x40;
-	unsigned char seated = PINA & 0x20;
-	unsigned char key = PINA & 0x10;
-	if(!seatbelt && seated && key) {
-	    ledlight += 0x80;
+	if((PINA & 0x0F) > 4) {
+	    levels = levels | 0x08;
 	}
+	if((PINA & 0x0F) > 6) {
+	    levels = levels | 0x04;
+	}
+	if((PINA & 0x0F) > 9) {
+	    levels = levels | 0x02;
+	}
+	if((PINA & 0x0F) > 12) {
+	    levels = levels | 0x01;
+	}
+	lowfuel = ((PINA & 0x0F) < 5) ? 0x40 : 0x00;
 
-	PORTC = ledlight;
+	unsigned char seatbelt = (PINA & 0x40) == 1;
+	unsigned char seated = (PINA & 0x20) == 1;
+	unsigned char key = (PINA & 0x10) == 1;
+	fastenicon = ((~seatbelt & seated) & key) ? 0x80 : 0x0;
+
+	PORTC = levels + lowfuel + fastenicon;
     }
     return 1;
 }
